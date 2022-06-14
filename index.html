@@ -5,131 +5,46 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Web Project</title>
+    <title>Hind</title>
 </head>
 <body onload="onLoad()">
-    <div class="score-container">
-        <h1 class="title">
-            Scores
-        </h1>
-
-        <div id="scores-list">
-
-        </div>
-    </div>
     <div class="main-container">
-        <div class="mode-selector">
-            <div class="indicator" id="mode-indicator">
-
-            </div>
-            <div onclick="changeMode(9)">
-                3x3
-            </div>
-            <div onclick="changeMode(16)">
-                4x4
-            </div>
-            <div onclick="changeMode(25)">
-                5x5
-            </div>
-        </div>
-        <div class="game-header">
-            <div id="timer">
-                00:00:00
-            </div>
-            
-        </div>
+        <h1 class="title">15 puzzle game</h1>
         <div class="game-box" id="game-box"></div>
-
-        <button class="primary-btn reset-btn" onclick="initGame()">
-            Reset
-        </button>
-
-        <div class="overlay hidden">
-            <div class="overlay-container">
-                <div class="overlay-settings">
-                    <div class="field-item">
-                        <label for="mode">
-                            <h1>Game Mode</h1>
-                        </label>
-                        <select name="mode" id="mode">
-                            <option value="9">3x3</option>
-                            <option value="16">4x4</option>
-                            <option value="25">5x5</option>
-                        </select>
-                    </div>
-                    
-                    <div class="field-item">
-                        <label for="timer">
-                            <h1>Timer</h1>
-                        </label>
-                        <input type="checkbox" name="timer" id="timer">
-                    </div>
-                </div>
-                <div class="overlay-buttons">
-                    <button>Canel</button>
-                    <button>Save</button>
-                </div>
-            </div>
-        </div>
     </div>
 
     <script>
         const gameBox = document.getElementById('game-box');
-        const timerText = document.getElementById('timer');
-        const scoresList = document.getElementById('scores-list');
         const boxSize = gameBox.clientWidth;
 
-        const gap = 10;
         const indexes = new Map();
-        const emptyClass = 'game-item-empty';
-        let mode = 16;
-        let timer = null;
-        let time = 0;
-        let scores = [];
 
         function onLoad() {
-            fetcScores();
-            setMode(localStorage.getItem("mode") ?? 9);
             initGame();
         }
         function initGame() {
-            showScores();
-            if (timer) clearInterval(timer);
-            time = 0;
-            timer = setInterval(updateTimer, 1000);
             generateRandomNumbers();
             render();
         }
 
-        function updateTimer() {
-            time++;
-            timerText.innerText = secondsToTime(time);
-        }
-
         function generateRandomNumbers() {
-            const numbers = [];
-            for (let i = 0; i < mode - 1; i++) {
+            const numbers = ["empty"];
+            for (let i = 0; i < 16 - 1; i++) {
                 const element = i+1;
                 numbers.push(element);
             }
-            console.log(numbers);
-            for (let i = 0; i < mode - 1; i++) {
+
+            for (let i = 0; i < 16; i++) {
                 const element = i;
                 const randomNumber = numbers[Math.floor(Math.random() * numbers.length)];
                 updateItemLocation(element, randomNumber);
                 numbers.splice(numbers.indexOf(randomNumber), 1);
             }
-            updateItemLocation(mode - 1, 'empty');
-
-            // for testing
-            for (let i = 0; i < mode - 1; i++) {
-                updateItemLocation(i, i+1);
-            }
         }
 
         function render() {
             gameBox.innerHTML = "";
-            for (let i = 0; i < mode; i++) {
+            for (let i = 0; i < 16; i++) {
                 const element = i + 1;
                 const text = getItemLocation(i)
                 addItem(i, text, text == 'empty');
@@ -150,7 +65,7 @@
             const item = document.createElement('div');
             item.classList.add('game-item');
             if (empty) {
-                item.classList.add(emptyClass);
+                item.classList.add('game-item-empty');
             }
             item.style.width = `${getItemSize()}px`;
             item.style.height = `${getItemSize()}px`;
@@ -167,97 +82,31 @@
             const empty = getEmpty();
             const emptyId = getElementId(empty);
             
-            console.log(emptyId, clickedId);
             if (!canGo(emptyId, clickedId)) return;
 
 
             updateItemLocation(clickedId, 'empty');
             updateItemLocation(emptyId, clicked.innerText);
-            highlightItems();
             if (checkForWin()) {
                 win();
             }
             render();
         }
 
-        function highlightItems() {
-            for (let i = 0; i < mode; i++) {
-                const element = document.getElementById(`i${i}`);
-                if (parseInt(element.innerText, 0) === i+1) {
-                    element.classList.add('game-item-highlight')
-                } else {
-                    element.classList.remove('game-item-highlight');
-                }
-            }
-        }
-
-        function changeMode(m) {
-            const confirm = window.confirm("Are you sure? your game will reset");
-            if (!confirm) return;
-            setMode(m);
-            initGame();
-        }
-
-        function fetcScores() {
-            scores = JSON.parse(localStorage.getItem('scores') ?? "[]");
-        }
-
-        function saveScores() {
-            localStorage.setItem("scores", JSON.stringify(scores));
-        }
-
-        function showScores() {
-            let s = scores.filter((s) => s.mode == mode)
-                .sort((a,b) => a.time - b.time);
-
-            scoresList.innerHTML = "";
-            for (let i = 0; i < s.length; i++) {
-                const score = s[i];
-                const element = document.createElement("div");
-                element.innerText = `${score.name ?? "UNKOWN"} - ${secondsToTime(score.time)}`;
-                scoresList.appendChild(element);
-            }
-        }
-
-        function setMode(m) {
-            mode = m;
-
-            const indicator = document.getElementById("mode-indicator");
-            indicator.classList.remove("m3", "m4", "m5");
-            if (mode === 9) {
-                indicator.classList.add("m3");
-            }
-            else if (mode === 16) {
-                indicator.classList.add("m4");
-            } else if (mode === 25) {
-                indicator.classList.add("m5");
-            }
-
-            localStorage.setItem("mode", m);
-        }
-
         function checkForWin() {
-            for (let i = 0; i < mode - 1; i++) {
+            for (let i = 0; i < 16 - 1; i++) {
                 if (indexes.get(i) != i +1) return false;
             }
             return true;
         }
 
         function win() {
-            const name = window.prompt("Your name");
-            const score = {
-                name,
-                time,
-                mode,
-            };
-
-            scores.push(score);
-            saveScores();
-            showScores();
+            alert("You win!!");
+            initGame();
         }
         
         function canGo(to, from) {
-            const size = Math.sqrt(mode);
+            const size = 4;
             let emptyColumn = Math.floor(to % size);
             let emptyRow = Math.floor(to / size);
             let clickedColumn = Math.floor(from % size);
@@ -289,11 +138,7 @@
         }
 
         function getItemSize() {
-            return (boxSize / Math.sqrt(mode)) - (gap *2);
-        }
-
-        function secondsToTime(seconds) {
-            return new Date(seconds * 1000).toISOString().substr(11, 8);
+            return (boxSize / 4);
         }
 
     </script>

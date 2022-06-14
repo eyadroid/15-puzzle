@@ -1,26 +1,11 @@
-@font-face {
-    font-family: 'ils';
-    src: url('/assets/fonts/ILoveSalmon.ttf');
-}
-
 body {
-    font-family: 'ils';
     margin: 0;
-    background: #FFBB00;
-    color: #B32B00;
+    background: black;
 }
 
-button {
-    font-family: 'ils';
-}
-
-.game-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-.header {
-    color: #005C92;
+.title {
+    text-align: center;
+    color: white;
 }
 
 .main-container {
@@ -39,12 +24,10 @@ button {
     flex-direction: row;
     flex-wrap: wrap;
     border-radius: 20px;
-    row-gap: 10px;
-    column-gap: 10px;
 }
 
 .game-item {
-    background: #007ac1;
+    background: #B32B00;
     color: white;
     display: flex;
     justify-content: center;
@@ -52,162 +35,10 @@ button {
     font-size: 40px;
     font-weight: bold;
     cursor: pointer;
-    /* transition: 0.5s all; */
-    border-radius: 10px;
-    border-bottom: 8px solid #004872;
-    border-right: 8px solid #004872;
+    outline: 1px solid white;
 }
 
 .game-item-empty {
-    background: #004872;
-    color: #004872;
-    font-size: 0;
-}
-.mode-selector {
-    display: flex;
-    width: 30vw;
-    background: #005C92;
-    height: 40px;
-    border-radius: 20px;
-    position: relative;
-    margin-bottom: 25px;
-}
-
-.mode-selector div {
-    flex: 1;
-    color: white;
-    text-align: center;
-    line-height: 40px;
-    cursor: pointer;
-    position: relative;
-}
-
-.mode-selector .indicator {
-    height: 100%;
-    width: 33%;
-    position: absolute;
-    background: #007ac1;
-    border-radius: 20px;
-    top: 0;
-    z-index: 0;
-    transition: 0.5s left;
-}
-
-.mode-selector .indicator.m3 {
-    left: 0;
-}
-.mode-selector .indicator.m4 {
-    left: 33%;
-}
-.mode-selector .indicator.m5 {
-    left: 67%;
-}
-
-.overlay {
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    z-index: 5;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.overlay-container {
     background: white;
-    width: 50%;
-    height: 50%;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-}
-
-.overlay-settings {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    padding: 10px;
-}
-.overlay-settings .field-item {
-    width: 100%;
-}
-.overlay-settings .field-item select {
-    width: 100%;
-    height: 50px;
-}
-
-.overlay-buttons {
-    width: 100%;
-    height: 100px;
-    display: flex;
-    row-gap: 10px;
-}
-
-.overlay-buttons button {
-    border: 1px solid black;
-    flex: 1;
-    background: #007ac1;
     color: white;
-    cursor: pointer;
-    border-bottom-right-radius: 20px;
-}
-
-.overlay-buttons button:nth-of-type(1) {
-    flex: 1;
-    background: white;
-    color: #007ac1;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 20px;
-}
-
-.primary-btn {
-    background: #005C92;
-    border: none;
-    color: white;
-    height: 40px;
-    border-radius: 7px;
-    font-size: 18px;
-    cursor: pointer;
-    /* border-color: #fff;
-    border-bottom: 3px solid;
-    border-right: 3px solid; */
-}
-
-.reset-btn {
-    margin-top: 20px;
-    width: 30vw;
-}
-
-
-.hidden {
-    display: none;
-}
-
-.game-item-highlight {
-    background: #FF3D00;
-    border-color: #B32B00;
-}
-
-#timer {
-    font-size: 50px;
-    margin-bottom: 20px;
-}
-
-.score-container {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 100%;
-    width: 30vw;
-    padding: 10px 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    row-gap: 20px;
-}
-
-.score-container .title {
-    padding-top: 15vh;
 }
